@@ -2,10 +2,12 @@ package com.example.al.moviesp1;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * Created by Al on 2016-01-07.
  */
-public class MovieInfo {
+public class MovieInfo implements Serializable {
 
     String posterPath;
     String title;

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">MoviesP1</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_detail">DetailActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_detail">Detail Activity</string>
+    <string name="title_activity_settings">Settings Activity</string>
 
 
     <string name="pref_sort_order_label">Sort Order</string>

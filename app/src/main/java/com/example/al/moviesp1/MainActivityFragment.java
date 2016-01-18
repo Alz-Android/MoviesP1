@@ -76,17 +76,12 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
-                String moviePosterPath = movieAdapter.getItem(position).posterPath;
-                String movieTitle = movieAdapter.getItem(position).title;
-                String moviePlot = movieAdapter.getItem(position).plot;
-                String movieReleaseDate = movieAdapter.getItem(position).releaseDate;
+                MovieInfo movieObj = movieAdapter.getItem(position);
 
                 Context context = getActivity();
                 Intent detailIntent = new Intent(context, DetailActivity.class);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, moviePosterPath);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, movieTitle);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, moviePlot);
-                detailIntent.putExtra(Intent.EXTRA_TEXT, movieReleaseDate);
+                detailIntent.putExtra("movie", movieObj);
+
                 startActivity(detailIntent);
 
                 Toast.makeText(context, " " + position,

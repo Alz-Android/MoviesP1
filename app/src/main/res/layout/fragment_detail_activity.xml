@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,9 +6,43 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/detail_text"
+        android:id="@+id/title_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="40dp"
         android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/releaseDate_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/movie_image"
+        android:layout_below="@+id/title_text"
+        android:text="@string/hello_blank_fragment" />
+
+    <TextView
+        android:id="@+id/userRating_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/releaseDate_text"
+        android:layout_toRightOf="@+id/movie_image"
+        android:text="@string/hello_blank_fragment" />
+
+    <TextView
+        android:id="@+id/plot_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movie_image"
+        android:text="@string/hello_blank_fragment" />
+
+    <ImageView
+        android:id="@+id/movie_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/title_text"
+
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>
