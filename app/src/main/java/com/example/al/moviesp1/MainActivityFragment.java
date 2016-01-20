@@ -30,7 +30,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -48,25 +47,32 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //for this fragment to handle menu events
         setHasOptionsMenu(true);
+        Log.i("MainActivityFragment", "onCreate()");
+     //   updateMovies();
     }
 
+/*
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Log.i("MainActivityFragment", "onOptionsItemSelected()");
+            updateMovies();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i("Frag", "MainActivityFragment 2");
-
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-        GetMovieTask getMovie = new GetMovieTask();
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortOrder = prefs.getString(getString(R.string.pref_sort_order_key),
-                getString(R.string.pref_sort_order_popularity));
-
-        getMovie.execute(sortOrder);
-
         movieAdapter = new MovieAdapter(getActivity(), new ArrayList<MovieInfo>());
+
+        Log.i("sort", "onCreateView()");
 
         // Get a reference to the ListView, and attach this adapter to it.
         GridView gridView = (GridView) rootView.findViewById(R.id.movies_grid);
@@ -83,30 +89,28 @@ public class MainActivityFragment extends Fragment {
                 detailIntent.putExtra("movie", movieObj);
 
                 startActivity(detailIntent);
-
-                Toast.makeText(context, " " + position,
-                        Toast.LENGTH_SHORT).show();
+                //               Toast.makeText(context, " " + position,/Toast.LENGTH_SHORT).show();
             }
         });
-
         return rootView;
     }
-    /*
-        @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    //        inflater.inflate(R.menu.MainActivityFragment, menu);
-        }
 
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
+    private void updateMovies(){
+        GetMovieTask getMovie = new GetMovieTask();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortOrder = prefs.getString(getString(R.string.pref_sort_order_key),
+                getString(R.string.pref_sort_order_popularity));
+        Log.i("sort", sortOrder);
+        getMovie.execute(sortOrder);
+    }
 
-            return super.onOptionsItemSelected(item);
-        }
-    */
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("MainActivityFragment", "onStart()");
+        updateMovies();
+    }
+
     public class GetMovieTask extends AsyncTask<String, Void, String> {
 
         private ArrayList<MovieInfo> getMovieDataFromJson(String movieJsonStr)
@@ -114,7 +118,6 @@ public class MainActivityFragment extends Fragment {
 
             // These are the names of the JSON objects that need to be extracted.
             final String Movie_Results = "results";
-            final String MOVIE_ID = "id";
             final String MOVIE_POSTER_PATH = "poster_path";
             final String MOVIE_TITLE = "title";
             final String MOVIE_PLOT = "overview";
@@ -124,9 +127,6 @@ public class MainActivityFragment extends Fragment {
 
             JSONObject moviesJson = new JSONObject(movieJsonStr);
             JSONArray moviesArray = moviesJson.getJSONArray(Movie_Results);
-
-// This would be the number of results that we want to display, the Top x, based on that criteria
-//            String[] resultStrs = new String[20];
 
             for(int i = 0; i < moviesArray.length(); i++) {
 
@@ -141,7 +141,6 @@ public class MainActivityFragment extends Fragment {
                 JSONObject movieObject = moviesArray.getJSONObject(i);
 
                 posterPath = movieObject.getString(MOVIE_POSTER_PATH);
-//                movieID = movieObject.getString(MOVIE_ID);
                 title = movieObject.getString(MOVIE_TITLE);
                 plot = movieObject.getString(MOVIE_PLOT);
                 userRatings = movieObject.getString(MOVIE_USER_RATINGS);
@@ -150,7 +149,7 @@ public class MainActivityFragment extends Fragment {
 
                 movieInfo.add(new MovieInfo(posterPath, title, plot, userRatings, popularity, releaseDate));
 
-                Log.i("MainActivityFragment", movieInfo.get(i).title+ " " + i);
+  //              Log.i("sort", movieInfo.get(i).title+ " " + i);
             }
             return movieInfo;
         }
@@ -172,23 +171,22 @@ public class MainActivityFragment extends Fragment {
                 final String APIKEY_PARAM = "api_key";
 
                 Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
-
                         .appendQueryParameter(SORT_PARAM, params[0])
                         .appendQueryParameter(APIKEY_PARAM, BuildConfig.MOVIES_TMDB_API_KEY)
                         .build();
 
                 URL url = new URL(builtUri.toString());
 
+                Log.i("sort", "Query String: " + builtUri.toString());
+
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
-                Log.i("MainActivityFragment", "after connection ");
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
-                    Log.i("MainActivityFragment", "4 null stream ");
                     // Nothing to do.
                     movieJsonStr = null;
                 }
@@ -196,25 +194,21 @@ public class MainActivityFragment extends Fragment {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.i("MainActivityFragment", "5 while loop ");
                     // new line to make debugging easier
                     buffer.append(line + "\n");
                 }
-                Log.i("MainActivityFragment", "6 after while ");
                 if (buffer.length() == 0) {
                     // Stream was empty.  No point in parsing.
                     return null;
                 }
-
                 movieJsonStr = buffer.toString();
-                Log.i("MainActivityFragment", "Forecast JSON String: " + movieJsonStr);
+                Log.i("sort", "movies JSON String: " + movieJsonStr);
 
             } catch (IOException e) {
                 Log.e("MainActivityFragment", "Error ", e);
 
                 return null;
             } finally {
-                Log.i("MainActivityFragment", "7 finally");
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
@@ -226,14 +220,7 @@ public class MainActivityFragment extends Fragment {
                     }
                 }
             }
-//            try {
                 return movieJsonStr;
-/*            } catch (JSONException e) {
-                Log.e("Fetch", e.getMessage());
-                e.printStackTrace();
-
-            }
-            return null;  */
         }
 
         @Override
@@ -242,8 +229,11 @@ public class MainActivityFragment extends Fragment {
             try {
                 ArrayList<MovieInfo> moviesObj = getMovieDataFromJson(movieJsonStr);
                 if(moviesObj !=null) {
+    //                movieAdapter = new MovieAdapter(getActivity(), new ArrayList<MovieInfo>());
                     movieAdapter.clear();
                     movieAdapter.addAll(moviesObj);
+
+                    Log.i("sort", moviesObj.toString());
                 }
             } catch(JSONException e) {
                 e.printStackTrace();
