@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ import java.util.ArrayList;
 public class MainActivityFragment extends Fragment {
 
     ArrayList<MovieInfo> movieInfo = new ArrayList<>();
-    private MovieAdapter movieAdapter;
+    private static MovieAdapter movieAdapter;
 
     public MainActivityFragment() {
     }
@@ -65,6 +66,12 @@ public class MainActivityFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 */
+    public void onResume(){
+        super.onResume();
+        Log.i("sort", "onResume()");
+        movieAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -230,7 +237,7 @@ public class MainActivityFragment extends Fragment {
                 ArrayList<MovieInfo> moviesObj = getMovieDataFromJson(movieJsonStr);
                 if(moviesObj !=null) {
     //                movieAdapter = new MovieAdapter(getActivity(), new ArrayList<MovieInfo>());
-                    movieAdapter.clear();
+   //                 movieAdapter.clear();
                     movieAdapter.addAll(moviesObj);
 
                     Log.i("sort", moviesObj.toString());

@@ -41,9 +41,7 @@ public class DetailActivity extends AppCompatActivity {
             Intent intent = getActivity().getIntent();
             View rootView = inflater.inflate(R.layout.fragment_detail_activity, container, false);
             if(intent != null) {
-                MovieInfo movieObj = (MovieInfo)intent.getSerializableExtra("movie");   //getStringExtra(Intent.EXTRA_TEXT);
-
-                Log.i("Detail", movieObj.title);
+                MovieInfo movieObj = (MovieInfo)intent.getSerializableExtra("movie");
 
                 ((TextView)rootView.findViewById(R.id.title_text)).setText(movieObj.title);
                 ((TextView)rootView.findViewById(R.id.releaseDate_text)).setText(movieObj.releaseDate);

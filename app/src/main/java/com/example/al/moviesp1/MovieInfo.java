@@ -13,21 +13,17 @@ public class MovieInfo implements Serializable {
     String title;
     String plot;
     String userRating;
-    String releaseDate;
     String popularity;
+    String releaseDate;
 
-
-    public MovieInfo(String mPoster, String mTitle, String mPlot, String mUserRating, String mReleaseDate, String mPopularity)
+    public MovieInfo(String mPoster, String mTitle, String mPlot, String mUserRating, String mPopularity,String mReleaseDate )
     {
         Log.i("MainActivityFragmen", "movie object");
-
         this.posterPath = mPoster;
         this.title = mTitle;
         this.plot = mPlot;
-        this.userRating = mUserRating;
-        this.releaseDate = mReleaseDate;
+        this.userRating = mUserRating+"/10";
         this.popularity = mPopularity;
-
-        Log.i("MainActivityFragmen", "movie object2");
+        this.releaseDate = mReleaseDate.substring(0,4);
     }
 }
