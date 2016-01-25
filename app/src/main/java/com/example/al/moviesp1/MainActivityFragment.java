@@ -10,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
  */
 public class MainActivityFragment extends Fragment {
 
-    ArrayList<MovieInfo> movieInfo = new ArrayList<>();
+    ArrayList<MovieInfo> movieInfoList = new ArrayList<>();
     private static MovieAdapter movieAdapter;
 
     public MainActivityFragment() {
@@ -63,13 +62,11 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("MainActivityFragment", "onActivityResult()1");
         if (requestCode == 0) {
             updateMovies();
-            Log.i("MainActivityFragment", "onActivityResult()2");
+            Log.i("MainActivityFragment", "onActivityResult()");
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +81,7 @@ public class MainActivityFragment extends Fragment {
         GridView gridView = (GridView) rootView.findViewById(R.id.movies_grid);
         gridView.setAdapter(movieAdapter);
 
+        // Creating the intent to launch detailed view
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -113,15 +111,16 @@ public class MainActivityFragment extends Fragment {
         private ArrayList<MovieInfo> getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
 
-            movieInfo.clear();
+            movieInfoList.clear();
             // These are the names of the JSON objects that need to be extracted.
             final String Movie_Results = "results";
             final String MOVIE_POSTER_PATH = "poster_path";
             final String MOVIE_TITLE = "title";
             final String MOVIE_PLOT = "overview";
             final String MOVIE_USER_RATINGS = "vote_average";
-            final String MOVIE_RELEASE_DATE = "release_date";
             final String MOVIE_POPULARITY = "popularity";
+            final String MOVIE_RELEASE_DATE = "release_date";
+
 
             JSONObject moviesJson = new JSONObject(movieJsonStr);
             JSONArray moviesArray = moviesJson.getJSONArray(Movie_Results);
@@ -137,7 +136,6 @@ public class MainActivityFragment extends Fragment {
 
                 // Get the JSON object representing a movie
                 JSONObject movieObject = moviesArray.getJSONObject(i);
-
                 posterPath = movieObject.getString(MOVIE_POSTER_PATH);
                 title = movieObject.getString(MOVIE_TITLE);
                 plot = movieObject.getString(MOVIE_PLOT);
@@ -145,9 +143,9 @@ public class MainActivityFragment extends Fragment {
                 popularity = movieObject.getString(MOVIE_POPULARITY);
                 releaseDate = movieObject.getString(MOVIE_RELEASE_DATE);
 
-                movieInfo.add(new MovieInfo(posterPath, title, plot, userRatings, popularity, releaseDate));
+                movieInfoList.add(new MovieInfo(posterPath, title, plot, userRatings, popularity, releaseDate));
             }
-            return movieInfo;
+            return movieInfoList;
         }
 
 
@@ -162,7 +160,7 @@ public class MainActivityFragment extends Fragment {
             String movieJsonStr = null;
 
             try {
-                final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?certification_country=US&certification=R";
+                final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
                 final String SORT_PARAM = "sort_by";
                 final String APIKEY_PARAM = "api_key";
 
@@ -198,7 +196,6 @@ public class MainActivityFragment extends Fragment {
                     return null;
                 }
                 movieJsonStr = buffer.toString();
-                Log.i("sort", "movies JSON String: " + movieJsonStr);
 
             } catch (IOException e) {
                 Log.e("MainActivityFragment", "Error ", e);
@@ -216,6 +213,7 @@ public class MainActivityFragment extends Fragment {
                     }
                 }
             }
+            Log.i("sort", movieJsonStr);
                 return movieJsonStr;
         }
 
@@ -228,7 +226,6 @@ public class MainActivityFragment extends Fragment {
                     movieAdapter.clear();
                     movieAdapter.addAll(moviesObj);
                     movieAdapter.notifyDataSetChanged();
-                    Log.i("sort onPost", movieAdapter.getItem(0).title.toString());
                 }
             } catch(JSONException e) {
                 e.printStackTrace();

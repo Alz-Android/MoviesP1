@@ -37,11 +37,12 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
+            // Creating the intent to rcv data from the Main Activity
+            // and attaching the data to the appropriate Views in Detail Activity
             Intent intent = getActivity().getIntent();
             View rootView = inflater.inflate(R.layout.fragment_detail_activity, container, false);
             if(intent != null) {
-                MovieInfo movieObj = (MovieInfo)intent.getSerializableExtra("movie");
+                MovieInfo movieObj = (MovieInfo)intent.getParcelableExtra("movie");
 
                 ((TextView)rootView.findViewById(R.id.title_text)).setText(movieObj.title);
                 ((TextView)rootView.findViewById(R.id.releaseDate_text)).setText(movieObj.releaseDate);
