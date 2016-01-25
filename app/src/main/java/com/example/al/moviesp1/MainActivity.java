@@ -22,14 +22,4 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivityForResult(new Intent(this, SettingsActivity.class), 0);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
