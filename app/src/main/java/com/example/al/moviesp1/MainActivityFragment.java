@@ -10,15 +10,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,29 +44,12 @@ public class MainActivityFragment extends Fragment {
         //for this fragment to handle menu events
         setHasOptionsMenu(true);
         Log.i("MainActivityFragment", "onCreate()");
-     //   updateMovies();
     }
 
-/*
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Log.i("MainActivityFragment", "onOptionsItemSelected()");
-            updateMovies();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-*/
     public void onResume(){
         super.onResume();
         Log.i("sort1", "onResume()");
         updateMovies();
-        movieAdapter.notifyDataSetChanged();
-        Log.i("sort1", "onResume() Notified");
     }
 
     @Override
@@ -83,7 +61,7 @@ public class MainActivityFragment extends Fragment {
 
         Log.i("sort", "onCreateView()");
 
-        // Get a reference to the ListView, and attach this adapter to it.
+        // Get a reference to the GridView, and attach this adapter to it.
         GridView gridView = (GridView) rootView.findViewById(R.id.movies_grid);
         gridView.setAdapter(movieAdapter);
 
@@ -92,13 +70,10 @@ public class MainActivityFragment extends Fragment {
                                     int position, long id) {
 
                 MovieInfo movieObj = movieAdapter.getItem(position);
-
                 Context context = getActivity();
                 Intent detailIntent = new Intent(context, DetailActivity.class);
                 detailIntent.putExtra("movie", movieObj);
-
                 startActivity(detailIntent);
-                //               Toast.makeText(context, " " + position,/Toast.LENGTH_SHORT).show();
             }
         });
         return rootView;
@@ -113,18 +88,13 @@ public class MainActivityFragment extends Fragment {
         getMovie.execute(sortOrder);
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        Log.i("MainActivityFragment", "onStart()");
-//        updateMovies();
-//    }
 
     public class GetMovieTask extends AsyncTask<String, Void, String> {
 
         private ArrayList<MovieInfo> getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
 
+            movieInfo.clear();
             // These are the names of the JSON objects that need to be extracted.
             final String Movie_Results = "results";
             final String MOVIE_POSTER_PATH = "poster_path";
@@ -157,8 +127,6 @@ public class MainActivityFragment extends Fragment {
                 releaseDate = movieObject.getString(MOVIE_RELEASE_DATE);
 
                 movieInfo.add(new MovieInfo(posterPath, title, plot, userRatings, popularity, releaseDate));
-
-  //              Log.i("sort", movieInfo.get(i).title+ " " + i);
             }
             return movieInfo;
         }
@@ -234,20 +202,18 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String movieJsonStr ){
-
             try {
                 ArrayList<MovieInfo> moviesObj = getMovieDataFromJson(movieJsonStr);
                 if(moviesObj !=null) {
-    //                movieAdapter = new MovieAdapter(getActivity(), new ArrayList<MovieInfo>());
-   //                 movieAdapter.clear();
+                    Log.i("sort onPost", movieJsonStr);
+                    movieAdapter.clear();
                     movieAdapter.addAll(moviesObj);
-
-                    Log.i("sort", moviesObj.toString());
+                    movieAdapter.notifyDataSetChanged();
+                    Log.i("sort onPost", movieAdapter.getItem(0).title.toString());
                 }
             } catch(JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

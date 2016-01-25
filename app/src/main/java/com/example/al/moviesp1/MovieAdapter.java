@@ -27,7 +27,6 @@ public class MovieAdapter extends ArrayAdapter<MovieInfo> {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.movie_item, parent, false);
         }
-
         ImageView imageView = (ImageView) convertView.findViewById(R.id.movie_image);
 
         Picasso.with(getContext())
@@ -35,7 +34,6 @@ public class MovieAdapter extends ArrayAdapter<MovieInfo> {
                 .into(imageView);
 
         Log.i("sort1", String.valueOf(position)+" "+this.getItem(position).posterPath);
-
         return convertView;
     }
 }

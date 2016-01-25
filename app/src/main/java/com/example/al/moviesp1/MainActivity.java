@@ -33,16 +33,4 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == 0) {
-//            // notify your adapter that data has changed
-//            MainActivityFragment.movieAdapter.notifyDataSetChanged();
-//            Log.i("MainActivityFragment", "onActivityResult()");
-//        }
-//    }
-
 }
