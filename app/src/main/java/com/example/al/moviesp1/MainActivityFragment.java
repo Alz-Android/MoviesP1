@@ -68,8 +68,10 @@ public class MainActivityFragment extends Fragment {
 */
     public void onResume(){
         super.onResume();
-        Log.i("sort", "onResume()");
+        Log.i("sort1", "onResume()");
+        updateMovies();
         movieAdapter.notifyDataSetChanged();
+        Log.i("sort1", "onResume() Notified");
     }
 
     @Override
@@ -107,16 +109,16 @@ public class MainActivityFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortOrder = prefs.getString(getString(R.string.pref_sort_order_key),
                 getString(R.string.pref_sort_order_popularity));
-        Log.i("sort", sortOrder);
+        Log.i("sort1", sortOrder);
         getMovie.execute(sortOrder);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i("MainActivityFragment", "onStart()");
-        updateMovies();
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        Log.i("MainActivityFragment", "onStart()");
+//        updateMovies();
+//    }
 
     public class GetMovieTask extends AsyncTask<String, Void, String> {
 

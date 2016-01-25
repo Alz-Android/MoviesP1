@@ -34,7 +34,7 @@ public class MovieAdapter extends ArrayAdapter<MovieInfo> {
                 .load("http://image.tmdb.org/t/p/w185/" + this.getItem(position).posterPath)
                 .into(imageView);
 
-        Log.i("TEST", String.valueOf(position)+" "+this.getItem(position).posterPath);
+        Log.i("sort1", String.valueOf(position)+" "+this.getItem(position).posterPath);
 
         return convertView;
     }
