@@ -43,14 +43,21 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //for this fragment to handle menu events
         setHasOptionsMenu(true);
+        updateMovies();
         Log.i("MainActivityFragment", "onCreate()");
     }
 
-    public void onResume(){
-        super.onResume();
-        Log.i("sort1", "onResume()");
-        updateMovies();
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("MainActivityFragment", "onActivityResult()1");
+        if (requestCode == 0) {
+            updateMovies();
+            Log.i("MainActivityFragment", "onActivityResult()2");
+        }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
