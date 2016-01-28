@@ -17,11 +17,12 @@ public class MovieAdapter extends ArrayAdapter<MovieInfo> {
 
     public MovieAdapter(Activity context, ArrayList<MovieInfo> movieInfo) {
         super(context, 0, movieInfo);
-        Log.i("TEST", "MovieInfoAdapter 1");
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        Log.i("TEST", Integer.valueOf(this.getItemViewType(position)).toString() );
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
@@ -31,6 +32,8 @@ public class MovieAdapter extends ArrayAdapter<MovieInfo> {
 
         Picasso.with(getContext())
                 .load("http://image.tmdb.org/t/p/w185/" + this.getItem(position).posterPath)
+                .placeholder(R.drawable.user_placeholder)
+                .error(R.drawable.user_placeholder_error)
                 .into(imageView);
 
         Log.i("sort1", String.valueOf(position)+" "+this.getItem(position).posterPath);
