@@ -53,5 +53,17 @@
             android:layout_below="@+id/title_text"
             android:paddingRight="10sp"
             android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Trailer 1"
+            android:id="@+id/trailer_text"
+            android:layout_below="@+id/plot_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
     </RelativeLayout>
 </ScrollView>
